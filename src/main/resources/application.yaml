@@ -2,24 +2,17 @@ server:
   port: 8080
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/finset
-    username: chorok
-    password: 789789
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: local
 
   jpa:
     hibernate:
-      ddl-auto: update # ??? update ? ?? validate
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
-  sql:
-    init:
-      mode: never
 
 logging:
   level:
