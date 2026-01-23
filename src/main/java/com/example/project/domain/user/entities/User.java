@@ -31,7 +31,7 @@ public class User extends BaseEntity {
   private AuthProvider authProvider; // GOOGLE / NAVER / KAKAO
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @Column(name = "user_role", nullable = false)
   private UserRole userRole; // USER / ADMIN
 
 }
