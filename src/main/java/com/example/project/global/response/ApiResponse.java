@@ -1,13 +1,20 @@
-public record ApiResponse<T>(
-        boolean success,
-        T data,
-        String message
-) {
-    public static <T> ApiResponse<T> ok(T data) {
-        return new ApiResponse<>(true, data, null);
-    }
+package com.example.project.global.response;
 
-    public static ApiResponse<?> fail(String message) {
-        return new ApiResponse<>(false, null, message);
-    }
+import com.example.project.global.exception.ErrorCode;
+
+public record ApiResponse<T>(
+    boolean success,
+    T data,
+    String message,
+    String code
+) {
+
+  public static <T> ApiResponse<T> ok(T data) {
+    return new ApiResponse<>(true, data, null, null);
+  }
+
+  public static ApiResponse<?> fail(ErrorCode errorCode) {
+    return new ApiResponse<>(false, null, errorCode.message(), errorCode.code());
+  }
+
 }
