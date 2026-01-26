@@ -7,7 +7,8 @@ import com.example.project.global.response.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,32 +19,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-  private final AuthService authService;
-  private final JwtProvider jwtProvider;
+    private final AuthService authService;
+    private final JwtProvider jwtProvider;
 
-  @PostMapping("/refresh")
-  public ApiResponse<TokenResponseDto> refresh(@CookieValue("refreshToken") String refreshToken) {
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<TokenResponseDto>> refresh(
+            @CookieValue("refreshToken") String refreshToken
+    ) {
+        Long userId = authService.validateRefreshToken(refreshToken);
 
-    Long userId = authService.validateRefreshToken(refreshToken);
+        String newAccess = jwtProvider.createAccessToken(userId);
 
-    String newAccess = jwtProvider.createAccessToken(userId);
+        return ResponseEntity.ok(ApiResponse.ok(new TokenResponseDto(newAccess)));
+    }
 
-    return ApiResponse.ok(new TokenResponseDto(newAccess));
-  }
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(
+            Authentication authentication,
+            HttpServletResponse response
+    ) {
+        Long userId = (Long) authentication.getPrincipal();
+        authService.logout(userId);
 
-  @PostMapping("/logout")
-  public ApiResponse<?> logout(@AuthenticationPrincipal Long userId, HttpServletResponse response) {
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
 
-    authService.logout(userId);
+        response.addCookie(cookie);
 
-    Cookie cookie = new Cookie("refreshToken", null);
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge(0);
-
-    response.addCookie(cookie);
-
-    return ApiResponse.ok(null);
-  }
+        return ResponseEntity.ok(ApiResponse.ok(null));
+    }
 
 }

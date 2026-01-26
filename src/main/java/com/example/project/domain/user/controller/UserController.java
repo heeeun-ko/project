@@ -7,6 +7,7 @@ import com.example.project.global.exception.CustomException;
 import com.example.project.global.exception.ErrorCodeEnum;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @GetMapping("/me")
-  public ApiResponse<UserMeResponseDto> me(Authentication authentication) {
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserMeResponseDto>> me(Authentication authentication) {
 
-    Long userId = (Long) authentication.getPrincipal();
+        Long userId = (Long) authentication.getPrincipal();
 
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
-    return ApiResponse.ok(UserMeResponseDto.from(user));
-  }
+        return ResponseEntity.ok(ApiResponse.ok(UserMeResponseDto.from(user)));
+    }
 }
