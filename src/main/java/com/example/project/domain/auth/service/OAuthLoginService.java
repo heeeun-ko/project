@@ -30,12 +30,13 @@ public class OAuthLoginService {
 
     OAuthUserInfo oAuthUserInfo = oAuthProviderClient.getUserInfo(oAuth2User);
 
-    // OAuth에서 email 안 내려오는 경우 (카카오 동의 안 했을 때)
+    // OAuth에서 email 안 내려오는 경우 (동의 안 했을 때)
     if (oAuthUserInfo.getEmail() == null || oAuthUserInfo.getEmail().isBlank()) {
       throw new CustomException(ErrorCodeEnum.INVALID_REQUEST);
     }
 
-    return userRepository.findByEmail(oAuthUserInfo.getEmail())
+    return userRepository
+        .findByEmailAndAuthProvider(oAuthUserInfo.getEmail(), oAuthUserInfo.getProvider())
         .orElseGet(() -> register(oAuthUserInfo));
   }
 
@@ -49,6 +50,6 @@ public class OAuthLoginService {
             .userRole(UserRole.USER)
             .build()
     );
-
   }
+
 }
