@@ -3,12 +3,10 @@ package com.example.project.domain.auth.oauth;
 import com.example.project.domain.user.enums.AuthProvider;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 @Component
 public class KakaoOAuthClient implements OAuthProviderClient {
-
 
   @Override
   public AuthProvider getProvider() {
