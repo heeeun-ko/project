@@ -16,14 +16,14 @@ public class JwtProvider {
   @Value("${jwt.secret}")
   private String secret;
 
-  private SecretKey key;
+  private SecretKey secretKey;
 
-  private final Long ACCESS_TOKEN_EXPIRE = 1000L * 60 * 60 * 2; // 2시간
-  private final Long REFRESH_TOKEN_EXPIRE = 1000L * 60 * 60 * 24 * 2; // 2일
+  public static final long ACCESS_TOKEN_EXPIRE = 1000L * 60 * 60 * 2; // 2시간
+  public static final long REFRESH_TOKEN_EXPIRE = 1000L * 60 * 60 * 24 * 2; // 2일
 
   @PostConstruct
   public void init() {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
   public String createAccessToken(Long userId) {
@@ -31,7 +31,7 @@ public class JwtProvider {
         .setSubject(String.valueOf(userId))
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE))
-        .signWith(key, SignatureAlgorithm.HS256)
+        .signWith(secretKey, SignatureAlgorithm.HS256)
         .compact();
   }
 
@@ -40,14 +40,14 @@ public class JwtProvider {
         .setSubject(String.valueOf(userId))
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE))
-        .signWith(key, SignatureAlgorithm.HS256)
+        .signWith(secretKey, SignatureAlgorithm.HS256)
         .compact();
   }
 
   public Long getUserId(String token) {
     return Long.valueOf(
         Jwts.parserBuilder()
-            .setSigningKey(key)
+            .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(token)
             .getBody()

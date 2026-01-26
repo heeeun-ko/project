@@ -34,8 +34,7 @@ public class OAuthLoginService {
       throw new CustomException(ErrorCodeEnum.INVALID_REQUEST);
     }
 
-    return userRepository
-        .findByEmailAndAuthProvider(oAuthUserInfo.getEmail(), oAuthUserInfo.getProvider())
+    return userRepository.findByEmailAndAuthProvider(oAuthUserInfo.getEmail(), oAuthUserInfo.getProvider())
         .orElseGet(() -> register(oAuthUserInfo));
   }
 

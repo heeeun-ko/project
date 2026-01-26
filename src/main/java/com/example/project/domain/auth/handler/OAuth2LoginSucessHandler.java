@@ -1,6 +1,7 @@
 package com.example.project.domain.auth.handler;
 
-import com.example.project.domain.auth.service.JwtService;
+import com.example.project.domain.auth.jwt.JwtProvider;
+import com.example.project.domain.auth.service.AuthService;
 import com.example.project.domain.auth.service.OAuthLoginService;
 import com.example.project.domain.user.entities.User;
 import com.example.project.domain.user.enums.AuthProvider;
@@ -20,7 +21,8 @@ import java.io.IOException;
 public class OAuth2LoginSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
   private final OAuthLoginService oAuthLoginService;
-  private final JwtService jwtService;
+  private final JwtProvider jwtProvider;
+  private final AuthService authService;
 
   @Override
   public void onAuthenticationSuccess(
@@ -30,21 +32,22 @@ public class OAuth2LoginSucessHandler extends SimpleUrlAuthenticationSuccessHand
   ) throws IOException {
 
     OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-    String registrationId =
-        ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+
+    String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
     AuthProvider provider = AuthProvider.valueOf(registrationId.toUpperCase());
+
     User user = oAuthLoginService.login(provider, oAuth2User);
 
-    String accessToken = jwtService.createAccessToken(user.getId());
-    String refreshToken = jwtService.createRefreshToken(user.getId());
+    String accessToken = jwtProvider.createAccessToken(user.getId());
+    String refreshToken = authService.createRefreshToken(user.getId());
 
     // Refresh Token → HttpOnly Cookie
     Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
     refreshCookie.setHttpOnly(true);
     refreshCookie.setSecure(false); // 운영에서는 true
     refreshCookie.setPath("/");
-    refreshCookie.setMaxAge(7 * 24 * 60 * 60);
+    refreshCookie.setMaxAge((int) (60 * 60 * 24 * 7));
 
     response.addCookie(refreshCookie);
 
