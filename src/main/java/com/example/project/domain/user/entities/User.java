@@ -10,14 +10,22 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "users")
+@Table(
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "unique_email_provider",
+            columnNames = {"email", "auth_provider"}
+        )
+    }
+    )
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class User extends BaseEntity {
 
-  @Column(length = 100, nullable = false, unique = true)
+  @Column(length = 100, nullable = false)
   private String email;
 
   @Column(length = 50, nullable = false)
