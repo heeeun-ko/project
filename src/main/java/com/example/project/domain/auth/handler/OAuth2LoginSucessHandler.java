@@ -4,8 +4,7 @@ import com.example.project.domain.auth.service.JwtService;
 import com.example.project.domain.auth.service.OAuthLoginService;
 import com.example.project.domain.user.entities.User;
 import com.example.project.domain.user.enums.AuthProvider;
-import com.example.project.global.exception.CustomException;
-import com.example.project.global.exception.ErrorCodeEnum;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,24 +30,27 @@ public class OAuth2LoginSucessHandler extends SimpleUrlAuthenticationSuccessHand
   ) throws IOException {
 
     OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
     String registrationId =
-        ((OAuth2AuthenticationToken) authentication)
-            .getAuthorizedClientRegistrationId();
+        ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
-    AuthProvider authProvider;
-    try {
-      authProvider = AuthProvider.valueOf(registrationId.toUpperCase());
-    } catch (IllegalArgumentException e) {
-      throw new CustomException(ErrorCodeEnum.INVALID_REQUEST);
-    }
-
-    User user = oAuthLoginService.login(authProvider, oAuth2User);
+    AuthProvider provider = AuthProvider.valueOf(registrationId.toUpperCase());
+    User user = oAuthLoginService.login(provider, oAuth2User);
 
     String accessToken = jwtService.createAccessToken(user.getId());
+    String refreshToken = jwtService.createRefreshToken(user.getId());
 
+    // Refresh Token → HttpOnly Cookie
+    Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+    refreshCookie.setHttpOnly(true);
+    refreshCookie.setSecure(false); // 운영에서는 true
+    refreshCookie.setPath("/");
+    refreshCookie.setMaxAge(7 * 24 * 60 * 60);
+
+    response.addCookie(refreshCookie);
+
+    // Access Token → redirect
     response.sendRedirect(
-        "http://localhost:3000/login/success?token=" + accessToken
+        "http://localhost:3030/login/success?accessToken=" + accessToken
     );
   }
 }
