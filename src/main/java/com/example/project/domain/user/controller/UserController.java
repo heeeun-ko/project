@@ -1,33 +1,44 @@
 package com.example.project.domain.user.controller;
 
-import com.example.project.domain.user.dto.response.UserMeResponseDto;
-import com.example.project.domain.user.entities.User;
-import com.example.project.domain.user.repository.UserRepository;
-import com.example.project.global.exception.CustomException;
-import com.example.project.global.exception.ErrorCodeEnum;
+import com.example.project.domain.user.dto.request.UpdateProfileRequestDto;
+import com.example.project.domain.user.dto.response.UserProfileResponseDto;
+import com.example.project.domain.user.service.UserService;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserMeResponseDto>> me(Authentication authentication) {
+    public ResponseEntity<ApiResponse<UserProfileResponseDto>> me(Authentication authentication) {
 
         Long userId = (Long) authentication.getPrincipal();
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
+        return ResponseEntity.ok(ApiResponse.ok(userService.getProfile(userId)));
+    }
 
-        return ResponseEntity.ok(ApiResponse.ok(UserMeResponseDto.from(user)));
+    @PatchMapping("/me")
+    public ResponseEntity<ApiResponse<UserProfileResponseDto>> updateProfile(
+            Authentication authentication,
+            @RequestBody UpdateProfileRequestDto updateProfileRequestDto
+    ) {
+
+        Long userId = (Long) authentication.getPrincipal();
+        log.info("Update profile request: {}", userId);
+
+        return ResponseEntity.ok(ApiResponse.ok(userService.updateProfile(userId, updateProfileRequestDto)));
     }
 }
