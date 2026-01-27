@@ -27,8 +27,7 @@ public class SecurityConfig {
             .requestMatchers("/",
                 "/login/**",
                 "/oauth2/**",
-                "/api/v1/auth/refresh",
-                "/api/v1/auth/logout"
+                "/api/v1/auth/refresh"
             ).permitAll()  // 허용 URL 설정
 
             // Media 도메인
