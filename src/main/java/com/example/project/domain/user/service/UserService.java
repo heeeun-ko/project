@@ -22,7 +22,7 @@ public class UserService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
-    return UserProfileResponseDto.profile(user);
+    return UserProfileResponseDto.from(user);
   }
 
   @Transactional
@@ -36,7 +36,7 @@ public class UserService {
         updateProfileRequestDto.getProfileImageUrl()
     );
 
-    return UserProfileResponseDto.profile(user);
+    return UserProfileResponseDto.from(user);
   }
 
 

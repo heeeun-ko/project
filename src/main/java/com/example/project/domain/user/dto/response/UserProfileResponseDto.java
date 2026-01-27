@@ -17,7 +17,7 @@ public class UserProfileResponseDto {
   private String profileImageUrl;
   private AuthProvider authProvider;
 
-  public static UserProfileResponseDto profile(User user) {
+  public static UserProfileResponseDto from(User user) {
     return new UserProfileResponseDto(
         user.getId(),
         user.getEmail(),

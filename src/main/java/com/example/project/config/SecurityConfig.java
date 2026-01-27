@@ -5,6 +5,7 @@ import com.example.project.domain.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,7 +30,11 @@ public class SecurityConfig {
                 "/api/v1/auth/refresh",
                 "/api/v1/auth/logout"
             ).permitAll()  // 허용 URL 설정
-            // .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
+
+            // Media 도메인
+            .requestMatchers(HttpMethod.GET, "/api/v1/media").permitAll()
+
+            .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
         )
         .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (API 서버의 경우)
         .formLogin(form -> form.disable())  // 폼 로그인 비활성화
