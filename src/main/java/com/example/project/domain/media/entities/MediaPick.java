@@ -1,9 +1,7 @@
-package com.example.project.domain.mediapick.entities;
+package com.example.project.domain.media.entities;
 
-import com.example.project.domain.media.entities.Media;
 import com.example.project.domain.user.entities.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
