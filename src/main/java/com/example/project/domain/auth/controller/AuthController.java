@@ -19,36 +19,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    private final AuthService authService;
-    private final JwtProvider jwtProvider;
+  private final AuthService authService;
+  private final JwtProvider jwtProvider;
 
-    @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse<TokenResponseDto>> refresh(
-            @CookieValue("refreshToken") String refreshToken
-    ) {
-        Long userId = authService.validateRefreshToken(refreshToken);
+  @PostMapping("/refresh")
+  public ResponseEntity<ApiResponse<TokenResponseDto>> refresh(
+      @CookieValue("refreshToken") String refreshToken
+  ) {
 
-        String newAccess = jwtProvider.createAccessToken(userId);
+    Long userId = authService.validateRefreshToken(refreshToken);
 
-        return ResponseEntity.ok(ApiResponse.ok(new TokenResponseDto(newAccess)));
-    }
+    String newAccess = jwtProvider.createAccessToken(userId);
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(
-            Authentication authentication,
-            HttpServletResponse response
-    ) {
-        Long userId = (Long) authentication.getPrincipal();
-        authService.logout(userId);
+    return ResponseEntity.ok(ApiResponse.ok(new TokenResponseDto(newAccess)));
+  }
 
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
+  @PostMapping("/logout")
+  public ResponseEntity<ApiResponse<Void>> logout(
+      Authentication authentication,
+      HttpServletResponse response
+  ) {
 
-        response.addCookie(cookie);
+    Long userId = (Long) authentication.getPrincipal();
+    authService.logout(userId);
 
-        return ResponseEntity.ok(ApiResponse.ok(null));
-    }
+    Cookie cookie = new Cookie("refreshToken", null);
+    cookie.setPath("/");
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(0);
+
+    response.addCookie(cookie);
+
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
 
 }

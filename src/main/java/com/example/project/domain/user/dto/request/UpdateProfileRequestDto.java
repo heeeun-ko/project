@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateProfileRequestDto {
 
-    private String name;
-    private String profileImageUrl;
+  private String name;
+  private String profileImageUrl;
 
 }

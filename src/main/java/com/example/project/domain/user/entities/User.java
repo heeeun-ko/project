@@ -16,13 +16,13 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(
-        name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "unique_email_provider",
-                        columnNames = {"email", "auth_provider"}
-                )
-        }
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "unique_email_provider",
+            columnNames = {"email", "auth_provider"}
+        )
+    }
 )
 @SuperBuilder
 @AllArgsConstructor
@@ -30,33 +30,33 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class User extends BaseEntity {
 
-    @Column(length = 100, nullable = false)
-    private String email;
+  @Column(length = 100, nullable = false)
+  private String email;
 
-    @Column(length = 50, nullable = false)
-    private String name;
+  @Column(length = 50, nullable = false)
+  private String name;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+  @Column(name = "profile_image_url")
+  private String profileImageUrl;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "auth_provider", nullable = false)
-    private AuthProvider authProvider; // GOOGLE / NAVER / KAKAO
+  @Enumerated(EnumType.STRING)
+  @Column(name = "auth_provider", nullable = false)
+  private AuthProvider authProvider; // GOOGLE / NAVER / KAKAO
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false)
-    private UserRole userRole; // USER / ADMIN
+  @Enumerated(EnumType.STRING)
+  @Column(name = "user_role", nullable = false)
+  private UserRole userRole; // USER / ADMIN
 
 
-    public void updateProfile(String name, String profileImageUrl) {
+  public void updateProfile(String name, String profileImageUrl) {
 
-        if (name != null && !name.isBlank()) {
-            this.name = name;
-        }
-
-        if (profileImageUrl != null && !profileImageUrl.isBlank()) {
-            this.profileImageUrl = profileImageUrl;
-        }
+    if (name != null && !name.isBlank()) {
+      this.name = name;
     }
+
+    if (profileImageUrl != null && !profileImageUrl.isBlank()) {
+      this.profileImageUrl = profileImageUrl;
+    }
+  }
 
 }

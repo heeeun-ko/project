@@ -15,29 +15,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public UserProfileResponseDto getProfile(Long userId) {
+  public UserProfileResponseDto getProfile(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
-        return UserProfileResponseDto.profile(user);
-    }
+    return UserProfileResponseDto.profile(user);
+  }
 
-    @Transactional
-    public UserProfileResponseDto updateProfile(Long userId, UpdateProfileRequestDto updateProfileRequestDto) {
+  @Transactional
+  public UserProfileResponseDto updateProfile(Long userId, UpdateProfileRequestDto updateProfileRequestDto) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
 
-        user.updateProfile(
-                updateProfileRequestDto.getName(),
-                updateProfileRequestDto.getProfileImageUrl()
-        );
+    user.updateProfile(
+        updateProfileRequestDto.getName(),
+        updateProfileRequestDto.getProfileImageUrl()
+    );
 
-        return UserProfileResponseDto.profile(user);
-    }
+    return UserProfileResponseDto.profile(user);
+  }
 
 
 }

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 public class GoogleOAuthClient implements OAuthProviderClient {
 
   @Override
-  public AuthProvider getProvider() {
-    return AuthProvider.GOOGLE;
-  }
+  public AuthProvider getProvider() { return AuthProvider.GOOGLE; }
 
   @Override
   public OAuthUserInfo getUserInfo(OAuth2User oAuth2User) {

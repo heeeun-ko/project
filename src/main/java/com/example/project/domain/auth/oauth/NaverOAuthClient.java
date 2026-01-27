@@ -9,16 +9,13 @@ import java.util.Map;
 public class NaverOAuthClient implements OAuthProviderClient {
 
   @Override
-  public AuthProvider getProvider() {
-    return AuthProvider.NAVER;
-  }
+  public AuthProvider getProvider() { return AuthProvider.NAVER; }
 
   @Override
   @SuppressWarnings("unchecked")
   public OAuthUserInfo getUserInfo(OAuth2User oAuth2User) {
 
-    Map<String, Object> response =
-        (Map<String, Object>) oAuth2User.getAttribute("response");
+    Map<String, Object> response = (Map<String, Object>) oAuth2User.getAttribute("response");
 
     return OAuthUserInfo.builder()
         .email((String) response.get("email"))
@@ -27,4 +24,5 @@ public class NaverOAuthClient implements OAuthProviderClient {
         .provider(AuthProvider.NAVER)
         .build();
   }
+
 }

@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProfileResponseDto {
 
-    private Long id;
-    private String email;
-    private String name;
-    private String profileImageUrl;
-    private AuthProvider authProvider;
+  private Long id;
+  private String email;
+  private String name;
+  private String profileImageUrl;
+  private AuthProvider authProvider;
 
-    public static UserProfileResponseDto profile(User user) {
-        return new UserProfileResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getName(),
-                user.getProfileImageUrl(),
-                user.getAuthProvider()
-        );
-    }
+  public static UserProfileResponseDto profile(User user) {
+    return new UserProfileResponseDto(
+        user.getId(),
+        user.getEmail(),
+        user.getName(),
+        user.getProfileImageUrl(),
+        user.getAuthProvider()
+    );
+  }
 }

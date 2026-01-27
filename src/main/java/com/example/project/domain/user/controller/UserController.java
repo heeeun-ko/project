@@ -5,7 +5,6 @@ import com.example.project.domain.user.dto.response.UserProfileResponseDto;
 import com.example.project.domain.user.service.UserService;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,31 +13,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserProfileResponseDto>> me(Authentication authentication) {
+  @GetMapping("/me")
+  public ResponseEntity<ApiResponse<UserProfileResponseDto>> me(Authentication authentication) {
 
-        Long userId = (Long) authentication.getPrincipal();
+    Long userId = (Long) authentication.getPrincipal();
 
-        return ResponseEntity.ok(ApiResponse.ok(userService.getProfile(userId)));
-    }
+    return ResponseEntity.ok(ApiResponse.ok(userService.getProfile(userId)));
+  }
 
-    @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<UserProfileResponseDto>> updateProfile(
-            Authentication authentication,
-            @RequestBody UpdateProfileRequestDto updateProfileRequestDto
-    ) {
+  @PatchMapping("/me")
+  public ResponseEntity<ApiResponse<UserProfileResponseDto>> updateProfile(
+    Authentication authentication,
+    @RequestBody UpdateProfileRequestDto updateProfileRequestDto
+) {
+    Long userId = (Long) authentication.getPrincipal();
 
-        Long userId = (Long) authentication.getPrincipal();
-        log.info("Update profile request: {}", userId);
-
-        return ResponseEntity.ok(ApiResponse.ok(userService.updateProfile(userId, updateProfileRequestDto)));
-    }
+    return ResponseEntity.ok(ApiResponse.ok(userService.updateProfile(userId, updateProfileRequestDto)));
+  }
 }
