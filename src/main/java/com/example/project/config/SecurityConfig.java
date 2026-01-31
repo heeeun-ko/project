@@ -24,7 +24,8 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/",
+            .requestMatchers(
+                "/",
                 "/login/**",
                 "/oauth2/**",
                 "/api/v1/auth/refresh"
@@ -35,6 +36,7 @@ public class SecurityConfig {
 
             .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
         )
+
         .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (API 서버의 경우)
         .formLogin(form -> form.disable())  // 폼 로그인 비활성화
         .httpBasic(basic -> basic.disable())  // HTTP Basic 인증 비활성화
