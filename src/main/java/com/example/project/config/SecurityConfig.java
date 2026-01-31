@@ -16,36 +16,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final OAuth2LoginSucessHandler oAuth2LoginSucessHandler;
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2LoginSucessHandler oAuth2LoginSucessHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    http
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/",
-                "/login/**",
-                "/oauth2/**",
-                "/api/v1/auth/refresh",
-                "/api/v1/auth/logout"
-            ).permitAll()  // 허용 URL 설정
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/",
+                                "/login/**",
+                                "/oauth2/**",
+                                "/api/v1/auth/refresh"
+                        ).permitAll()  // 허용 URL 설정
 
-            // Media 도메인
-            .requestMatchers(HttpMethod.GET, "/api/v1/media").permitAll()
+                        // Media 도메인
+                        .requestMatchers(HttpMethod.GET, "/api/v1/media").permitAll()
 
-            .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
-        )
-        .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (API 서버의 경우)
-        .formLogin(form -> form.disable())  // 폼 로그인 비활성화
-        .httpBasic(basic -> basic.disable())  // HTTP Basic 인증 비활성화
-        .oauth2Login(oauth -> oauth
-            .successHandler(oAuth2LoginSucessHandler)
-        )
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-    ;
+                        .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
+                )
+                .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (API 서버의 경우)
+                .formLogin(form -> form.disable())  // 폼 로그인 비활성화
+                .httpBasic(basic -> basic.disable())  // HTTP Basic 인증 비활성화
+                .oauth2Login(oauth -> oauth
+                        .successHandler(oAuth2LoginSucessHandler)
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        ;
 
-    return http.build();
-  }
+        return http.build();
+    }
 
 }
