@@ -18,7 +18,7 @@ public class NaverNewsClient {
   @Value("${naver.news.client-secret}")
   private String clientSecret;
 
-  public NaverNewsResponseDto fetchNews(String query, String sort, int start, int display) {
+  public NaverNewsResponseDto searchNews(String query, String sort, int start, int display) {
 
     return webClient.get()
         .uri(uriBuilder -> uriBuilder
