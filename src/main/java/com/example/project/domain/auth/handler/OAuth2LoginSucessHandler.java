@@ -30,16 +30,14 @@ public class OAuth2LoginSucessHandler extends SimpleUrlAuthenticationSuccessHand
       HttpServletResponse response,
       Authentication authentication
   ) throws IOException {
-
     OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
     String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
-
     AuthProvider provider = AuthProvider.valueOf(registrationId.toUpperCase());
 
+    // oauth 로그인 or 회원가입
     User user = oAuthLoginService.login(provider, oAuth2User);
 
-    String accessToken = jwtProvider.createAccessToken(user.getId());
+    String accessToken = jwtProvider.createAccessToken(user.getId(), user.getUserRole());
     String refreshToken = authService.createRefreshToken(user.getId());
 
     // Refresh Token → HttpOnly Cookie

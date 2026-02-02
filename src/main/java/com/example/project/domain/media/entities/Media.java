@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Media extends BaseEntity {
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 100, unique = true)
   private String name;
 
   @Column(name = "logo_url")

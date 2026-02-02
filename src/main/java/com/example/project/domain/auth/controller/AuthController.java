@@ -3,6 +3,7 @@ package com.example.project.domain.auth.controller;
 import com.example.project.domain.auth.dto.TokenResponseDto;
 import com.example.project.domain.auth.jwt.JwtProvider;
 import com.example.project.domain.auth.service.AuthService;
+import com.example.project.domain.user.enums.UserRole;
 import com.example.project.global.response.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,16 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final AuthService authService;
-  private final JwtProvider jwtProvider;
 
   @PostMapping("/refresh")
   public ResponseEntity<ApiResponse<TokenResponseDto>> refresh(
       @CookieValue("refreshToken") String refreshToken
   ) {
-
-    Long userId = authService.validateRefreshToken(refreshToken);
-
-    String newAccess = jwtProvider.createAccessToken(userId);
+    String newAccess = authService.reissueAccessToken(refreshToken);
 
     return ResponseEntity.ok(ApiResponse.ok(new TokenResponseDto(newAccess)));
   }
@@ -39,7 +36,6 @@ public class AuthController {
       Authentication authentication,
       HttpServletResponse response
   ) {
-
     Long userId = (Long) authentication.getPrincipal();
     authService.logout(userId);
 
@@ -47,7 +43,6 @@ public class AuthController {
     cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setMaxAge(0);
-
     response.addCookie(cookie);
 
     return ResponseEntity.ok(ApiResponse.ok(null));

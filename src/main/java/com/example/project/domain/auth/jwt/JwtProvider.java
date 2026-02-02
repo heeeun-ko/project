@@ -1,5 +1,6 @@
 package com.example.project.domain.auth.jwt;
 
+import com.example.project.domain.user.enums.UserRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -26,9 +27,10 @@ public class JwtProvider {
     this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String createAccessToken(Long userId) {
+  public String createAccessToken(Long userId, UserRole role) {
     return Jwts.builder()
         .setSubject(String.valueOf(userId))
+        .claim("role", role.name())
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE))
         .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -52,6 +54,17 @@ public class JwtProvider {
             .parseClaimsJws(token)
             .getBody()
             .getSubject()
+    );
+  }
+
+  public UserRole getUserRole(String token) {
+    return UserRole.valueOf(
+        Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .get("role", String.class)
     );
   }
 
