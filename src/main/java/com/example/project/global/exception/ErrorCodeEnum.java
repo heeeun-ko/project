@@ -26,6 +26,8 @@ public enum ErrorCodeEnum implements ErrorCode {
   // ===== Media Pick =====
   MEDIA_PICK_FORBIDDEN(HttpStatus.FORBIDDEN, "MEDIA_PICK_403", "일반 사용자만 관심 언론사를 설정할 수 있습니다."),
   MEDIA_ALREADY_PICKED(HttpStatus.CONFLICT, "MEDIA_PICK_409", "이미 관심 언론사로 등록되어 있습니다."),
+  MEDIA_PICK_EMPTY_REQUEST(HttpStatus.BAD_REQUEST, "MEDIA_PICK_400", "선택한 언론사가 없습니다."),
+  MEDIA_PICK_ALREADY_ALL(HttpStatus.CONFLICT, "MEDIA_PICK_409_ALL", "이미 모든 언론사가 관심 언론사로 등록되어 있습니다."),
   MEDIA_PICK_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDIA_PICK_404", "관심 언론사를 찾을 수 없습니다.")
   ;
 

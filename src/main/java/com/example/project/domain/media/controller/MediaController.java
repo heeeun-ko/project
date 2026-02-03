@@ -1,6 +1,7 @@
 package com.example.project.domain.media.controller;
 
 import com.example.project.domain.media.dto.request.MediaCreateRequestDto;
+import com.example.project.domain.media.dto.request.MediaPickBatchRequestDto;
 import com.example.project.domain.media.dto.request.MediaPickRequestDto;
 import com.example.project.domain.media.dto.response.MediaPickResponseDto;
 import com.example.project.domain.media.dto.response.MediaResponseDto;
@@ -53,6 +54,16 @@ public class MediaController {
   ) {
     Long userId = (Long) authentication.getPrincipal();
     mediaPickService.addMediaPick(userId, mediaPickRequestDto);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
+  /* 관심 언론사 추가(다건) */
+  @PostMapping("/picks/batch")
+  public ResponseEntity<ApiResponse<Void>> addPicks(
+      Authentication authentication, @RequestBody MediaPickBatchRequestDto mediaPickBatchRequestDto
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    mediaPickService.addMediaPickBatch(userId, mediaPickBatchRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
