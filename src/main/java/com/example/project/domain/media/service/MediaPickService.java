@@ -88,4 +88,19 @@ public class MediaPickService {
 
     mediaPickRepository.saveAll(picks);
   }
+
+  @Transactional
+  public void deleteMediaPickBatch(Long userId, MediaPickBatchRequestDto mediaPickBatchRequestDto) {
+    User user = userService.getUserWithRole(userId, UserRole.USER);
+
+    List<Long> mediaIds = mediaPickBatchRequestDto.getMediaIds();
+
+    if (mediaIds == null || mediaIds.isEmpty()) {
+      throw new CustomException(ErrorCodeEnum.MEDIA_PICK_EMPTY_REQUEST);
+    }
+
+    // 없는 mediaId는 자동 무시
+    mediaPickRepository.deleteById_UserIdAndId_MediaIdIn(user.getId(), mediaIds);
+  }
+
 }

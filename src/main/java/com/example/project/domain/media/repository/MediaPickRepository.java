@@ -15,4 +15,5 @@ public interface MediaPickRepository extends JpaRepository<MediaPick, MediaPickI
 
   List<MediaPick> findAllById_UserId(Long userId);
 
+  void deleteById_UserIdAndId_MediaIdIn(Long userId, List<Long> mediaIds);
 }

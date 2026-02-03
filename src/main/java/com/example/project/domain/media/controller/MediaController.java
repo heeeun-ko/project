@@ -67,4 +67,14 @@ public class MediaController {
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
+  /* 관심 언론사 삭제(다건) */
+  @DeleteMapping("/picks")
+  public ResponseEntity<ApiResponse<Void>> deletePicks(
+      Authentication authentication, @RequestBody MediaPickBatchRequestDto request
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    mediaPickService.deleteMediaPickBatch(userId, request);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
 }
