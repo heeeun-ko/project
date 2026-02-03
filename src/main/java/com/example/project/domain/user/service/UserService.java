@@ -3,6 +3,7 @@ package com.example.project.domain.user.service;
 import com.example.project.domain.user.dto.request.UpdateProfileRequestDto;
 import com.example.project.domain.user.dto.response.UserProfileResponseDto;
 import com.example.project.domain.user.entities.User;
+import com.example.project.domain.user.enums.UserRole;
 import com.example.project.domain.user.repository.UserRepository;
 import com.example.project.global.exception.CustomException;
 import com.example.project.global.exception.ErrorCodeEnum;
@@ -39,5 +40,18 @@ public class UserService {
     return UserProfileResponseDto.from(user);
   }
 
+  public User getUser(Long userId) {
+    return userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCodeEnum.USER_NOT_FOUND));
+  }
+
+  public User getUserWithRole(Long userId, UserRole userRole) {
+    User user = getUser(userId);
+
+    if (user.getUserRole() != userRole) {
+      throw new CustomException(ErrorCodeEnum.ACCESS_DENIED);
+    }
+
+    return user;
+  }
 
 }

@@ -1,13 +1,16 @@
 package com.example.project.domain.media.controller;
 
 import com.example.project.domain.media.dto.request.MediaCreateRequestDto;
+import com.example.project.domain.media.dto.response.MediaPickResponseDto;
 import com.example.project.domain.media.dto.response.MediaResponseDto;
+import com.example.project.domain.media.service.MediaPickService;
 import com.example.project.domain.media.service.MediaService;
 import com.example.project.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +21,15 @@ import java.util.List;
 public class MediaController {
 
   private final MediaService mediaService;
+  private final MediaPickService mediaPickService;
 
+  /* 언론사 목록 */
   @GetMapping
   public ResponseEntity<ApiResponse<List<MediaResponseDto>>> getAllMedia() {
     return ResponseEntity.ok(ApiResponse.ok(mediaService.getAllMedia()));
   }
 
+  /* 언론사 생성 [ADMIN] */
   @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<ApiResponse<Void>> createMedia(
@@ -32,4 +38,13 @@ public class MediaController {
     mediaService.crateMedia(mediaCreateRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
+
+  /* 관심 언론사 조회 */
+  @GetMapping("/picks")
+  public ResponseEntity<ApiResponse<List<MediaPickResponseDto>>> getMyPicks(Authentication authentication) {
+    Long userId = (Long) authentication.getPrincipal();
+    return ResponseEntity.ok(ApiResponse.ok(mediaPickService.getMyMediaPicks(userId))
+    );
+  }
+
 }
