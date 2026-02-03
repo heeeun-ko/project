@@ -38,10 +38,16 @@ public class MediaPick {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
-  public MediaPick(User user, Media media) {
+  public MediaPick(User user, Media media, LocalDateTime now) {
     this.user = user;
     this.media = media;
     this.id = new MediaPickId(user.getId(), media.getId());
+    this.createdAt = now;
+    this.updatedAt = now;
+  }
+
+  public void update(LocalDateTime now) {
+    this.updatedAt = now;
   }
 
 }

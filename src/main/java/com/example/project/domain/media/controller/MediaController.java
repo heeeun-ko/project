@@ -1,6 +1,7 @@
 package com.example.project.domain.media.controller;
 
 import com.example.project.domain.media.dto.request.MediaCreateRequestDto;
+import com.example.project.domain.media.dto.request.MediaPickRequestDto;
 import com.example.project.domain.media.dto.response.MediaPickResponseDto;
 import com.example.project.domain.media.dto.response.MediaResponseDto;
 import com.example.project.domain.media.service.MediaPickService;
@@ -32,9 +33,7 @@ public class MediaController {
   /* 언론사 생성 [ADMIN] */
   @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<ApiResponse<Void>> createMedia(
-      @RequestBody MediaCreateRequestDto mediaCreateRequestDto
-  ) {
+  public ResponseEntity<ApiResponse<Void>> createMedia(@RequestBody MediaCreateRequestDto mediaCreateRequestDto) {
     mediaService.crateMedia(mediaCreateRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
@@ -45,6 +44,16 @@ public class MediaController {
     Long userId = (Long) authentication.getPrincipal();
     return ResponseEntity.ok(ApiResponse.ok(mediaPickService.getMyMediaPicks(userId))
     );
+  }
+
+  /* 관심 언론사 추가(단건) */
+  @PostMapping("/picks")
+  public ResponseEntity<ApiResponse<Void>> addPick(
+      Authentication authentication, @RequestBody MediaPickRequestDto mediaPickRequestDto
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    mediaPickService.addMediaPick(userId, mediaPickRequestDto);
+    return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
 }

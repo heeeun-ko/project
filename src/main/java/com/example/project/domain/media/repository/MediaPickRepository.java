@@ -11,4 +11,6 @@ public interface MediaPickRepository extends JpaRepository<MediaPick, MediaPickI
 
   List<MediaPick> findAllByUserId(Long userId);
 
+  boolean existsByUserIdAndMediaId(Long userId, Long mediaId);
+
 }
