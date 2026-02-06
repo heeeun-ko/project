@@ -9,4 +9,6 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
 
   boolean existsByName(String name);
 
+  boolean existsByDomain(String domain);
+
 }

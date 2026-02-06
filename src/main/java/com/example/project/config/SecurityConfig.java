@@ -33,6 +33,7 @@ public class SecurityConfig {
 
             // Media 도메인
             .requestMatchers(HttpMethod.GET, "/api/v1/media").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/media/news").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/media").hasRole("ADMIN")
 
             .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요

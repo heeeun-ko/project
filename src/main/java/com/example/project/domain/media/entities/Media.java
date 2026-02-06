@@ -22,4 +22,7 @@ public class Media extends BaseEntity {
 
   @Column(name = "logo_url")
   private String logoUrl;
+
+  @Column(nullable = false)
+  private String domain;
 }

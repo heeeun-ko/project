@@ -5,16 +5,16 @@ import com.example.project.domain.media.dto.request.MediaPickBatchRequestDto;
 import com.example.project.domain.media.dto.request.MediaPickRequestDto;
 import com.example.project.domain.media.dto.response.MediaPickResponseDto;
 import com.example.project.domain.media.dto.response.MediaResponseDto;
+import com.example.project.domain.media.dto.response.NewsPageResponseDto;
+import com.example.project.domain.media.enums.NewsCategory;
 import com.example.project.domain.media.service.MediaPickService;
 import com.example.project.domain.media.service.MediaService;
 import com.example.project.global.response.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -76,5 +76,18 @@ public class MediaController {
     mediaPickService.deleteMediaPickBatch(userId, request);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
+
+  /* 뉴스 조회 (비로그인) */
+  @GetMapping("/news")
+  public ResponseEntity<ApiResponse<NewsPageResponseDto>> getAllNews(
+      @RequestParam(required = false) Long mediaId,
+      @RequestParam(defaultValue = "ALL") NewsCategory category,
+      @RequestParam(defaultValue = "latest") String sort,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size
+  ) {
+    return ResponseEntity.ok(ApiResponse.ok(mediaService.getNews(mediaId, category, sort, page, size)));
+  }
+
 
 }

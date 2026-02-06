@@ -9,4 +9,6 @@ public class MediaCreateRequestDto {
 
   private String name;
   private String logoUrl;
+  private String domain;
+
 }
