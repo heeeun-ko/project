@@ -22,12 +22,10 @@ public class Term extends BaseEntity {
   @Column(nullable = false)
   private TermLevel level;  // 초급 / 중급 / 상급
 
+  @Column(nullable = false, length = 200)
+  private String summary;
+
   @Column(nullable = false, columnDefinition = "TEXT")
   private String description;
 
-  public Term(String name, TermLevel level, String description) {
-    this.name = name;
-    this.level = level;
-    this.description = description;
-  }
 }

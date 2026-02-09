@@ -1,5 +1,7 @@
 package com.example.project.domain.user.entities;
 
+import com.example.project.domain.term.enums.TermLevel;
+import com.example.project.domain.term.enums.TermSelectType;
 import com.example.project.domain.user.enums.AuthProvider;
 import com.example.project.domain.user.enums.UserRole;
 import com.example.project.global.entity.BaseEntity;
@@ -10,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -46,6 +49,16 @@ public class User extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "user_role", nullable = false)
   private UserRole userRole; // USER / ADMIN
+
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  @Column(name = "preferred_term_level", nullable = false)
+  private TermLevel preferredTermLevel = TermLevel.BEGINNER;
+
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  @Column(name = "term_select_type", nullable = false)
+  private TermSelectType termSelectType = TermSelectType.ADMIN_PICK;
 
 
   public void updateProfile(String name, String profileImageUrl) {

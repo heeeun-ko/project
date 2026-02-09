@@ -29,7 +29,13 @@ public enum ErrorCodeEnum implements ErrorCode {
   MEDIA_ALREADY_PICKED(HttpStatus.CONFLICT, "MEDIA_PICK_409", "이미 관심 언론사로 등록되어 있습니다."),
   MEDIA_PICK_EMPTY_REQUEST(HttpStatus.BAD_REQUEST, "MEDIA_PICK_400", "선택한 언론사가 없습니다."),
   MEDIA_PICK_ALREADY_ALL(HttpStatus.CONFLICT, "MEDIA_PICK_409_ALL", "이미 모든 언론사가 관심 언론사로 등록되어 있습니다."),
-  MEDIA_PICK_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDIA_PICK_404", "관심 언론사를 찾을 수 없습니다.")
+  MEDIA_PICK_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDIA_PICK_404", "관심 언론사를 찾을 수 없습니다."),
+
+  // ===== Term =====
+  TERM_NOT_FOUND(HttpStatus.NOT_FOUND, "TERM_404", "용어를 찾을 수 없습니다."),
+  TERM_ALREADY_EXISTS(HttpStatus.CONFLICT, "TERM_409", "이미 등록된 용어입니다."),
+  TERM_CREATE_FORBIDDEN(HttpStatus.FORBIDDEN, "TERM_403", "용어 등록 권한이 없습니다.")
+
   ;
 
 
