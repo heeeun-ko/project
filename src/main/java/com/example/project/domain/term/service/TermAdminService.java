@@ -70,6 +70,15 @@ public class TermAdminService {
     return term.getId();
   }
 
+  // 용어 삭제
+  @Transactional
+  public void deleteTerm(Long termId) {
+    Term term = termRepository.findById(termId)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.TERM_NOT_FOUND));
+
+    termRepository.delete(term);
+  }
+
 
   /* ========= validation ========= */
   private void validateCreateRequest(TermCreateRequestDto termCreateRequestDto) {

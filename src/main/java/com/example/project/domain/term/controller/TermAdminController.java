@@ -44,4 +44,12 @@ public class TermAdminController {
     Long updatedTermId = termAdminService.updateTerm(termId, termCreateRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(updatedTermId));
   }
+
+  /* 용어 삭제 */
+  @DeleteMapping("/{termId}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<ApiResponse<Void>> deleteTerm(@PathVariable Long termId) {
+    termAdminService.deleteTerm(termId);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
 }
