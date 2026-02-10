@@ -1,6 +1,8 @@
 package com.example.project.domain.term.service;
 
+import com.example.project.domain.media.dto.response.MediaResponseDto;
 import com.example.project.domain.term.dto.request.TermCreateRequestDto;
+import com.example.project.domain.term.dto.response.TermAllResponseDto;
 import com.example.project.domain.term.entities.Term;
 import com.example.project.domain.term.repository.TermRepository;
 import com.example.project.global.exception.CustomException;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -43,4 +47,9 @@ public class TermAdminService {
 
     return term.getId();
   }
+
+  public List<TermAllResponseDto> getAllTerms() {
+    return termRepository.findAll().stream().map(TermAllResponseDto::from).toList();
+  }
+
 }

@@ -1,16 +1,17 @@
 package com.example.project.domain.term.controller;
 
+import com.example.project.domain.media.dto.response.MediaResponseDto;
 import com.example.project.domain.term.dto.request.TermCreateRequestDto;
+import com.example.project.domain.term.dto.response.TermAllResponseDto;
 import com.example.project.domain.term.service.TermAdminService;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,4 +29,9 @@ public class TermAdminController {
     return ResponseEntity.ok(ApiResponse.ok(termId));
   }
 
+  @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<ApiResponse<List<TermAllResponseDto>>> getAllTerms() {
+    return ResponseEntity.ok(ApiResponse.ok(termAdminService.getAllTerms()));
+  }
 }
