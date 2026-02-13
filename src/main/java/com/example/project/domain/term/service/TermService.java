@@ -7,6 +7,7 @@ import com.example.project.domain.term.enums.TermSelectType;
 import com.example.project.domain.term.repository.TermRepository;
 import com.example.project.domain.user.entities.User;
 import com.example.project.domain.user.repository.UserRepository;
+import com.example.project.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,22 +22,17 @@ import java.util.List;
 public class TermService {
 
   private final TermRepository termRepository;
-  private final UserRepository userRepository;
+  private final UserService userService;
 
-  public List<TermSummaryResponseDto> getDailySummaryTerms(Authentication authentication) {
+  public List<TermSummaryResponseDto> getDailySummaryTerms(Long userId) {
 
     // 로그인 안한 사용자 → ADMIN_PICK
-    if (authentication == null || !authentication.isAuthenticated()) {
+    if (userId == null) {
       return getAdminPickTerms();
     }
 
-    // 로그인 사용자 조회
-    User user = userRepository.findByEmailAndAuthProvider(authentication.getName(), )
-        .orElse(null);
-
-    if (user == null) {
-      return getAdminPickTerms();
-    }
+    // 로그인 사용자
+    User user = userService.getUser(userId);
 
     // 사용자 설정에 따른 분기
     if (user.getTermSelectType() == TermSelectType.RANDOM_BY_LEVEL) {
