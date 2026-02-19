@@ -3,6 +3,7 @@ package com.example.project.domain.term.controller;
 import com.example.project.domain.term.dto.request.TermCreateRequestDto;
 import com.example.project.domain.term.dto.response.TermAllResponseDto;
 import com.example.project.domain.term.dto.response.TermDetailResponseDto;
+import com.example.project.domain.term.dto.response.TermSettingResponseDto;
 import com.example.project.domain.term.dto.response.TermSummaryResponseDto;
 import com.example.project.domain.term.service.TermAdminService;
 import com.example.project.domain.term.service.TermService;
@@ -46,7 +47,7 @@ public class TermController {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<ApiResponse<Long>> updateTerm(
       @PathVariable Long termId, @RequestBody TermCreateRequestDto termCreateRequestDto
-  ){
+  ) {
     Long updatedTermId = termAdminService.updateTerm(termId, termCreateRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(updatedTermId));
   }
@@ -81,4 +82,13 @@ public class TermController {
 
     return ResponseEntity.ok(ApiResponse.ok(termService.getDailyTermDetail(userId, termId)));
   }
+
+  /* 용어 설정 조회 */
+  @GetMapping("/settings")
+  public ResponseEntity<ApiResponse<TermSettingResponseDto>> getMyTermSetting(Authentication authentication) {
+    Long userId = (Long) authentication.getPrincipal();
+
+    return ResponseEntity.ok(ApiResponse.ok(termService.getMyTermSetting(userId)));
+  }
+
 }

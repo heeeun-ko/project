@@ -1,6 +1,7 @@
 package com.example.project.domain.term.service;
 
 import com.example.project.domain.term.dto.response.TermDetailResponseDto;
+import com.example.project.domain.term.dto.response.TermSettingResponseDto;
 import com.example.project.domain.term.dto.response.TermSummaryResponseDto;
 import com.example.project.domain.term.entities.Term;
 import com.example.project.domain.term.enums.TermLevel;
@@ -58,6 +59,18 @@ public class TermService {
         .orElseThrow(() -> new CustomException(ErrorCodeEnum.TERM_NOT_FOUND));
 
     return TermDetailResponseDto.from(term);
+  }
+
+  // 용어 설정 조회
+  public TermSettingResponseDto getMyTermSetting(Long userId) {
+
+    if (userId == null) {
+      throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);
+    }
+
+    User user = userService.getUser(userId);
+
+    return TermSettingResponseDto.from(user);
   }
 
 
