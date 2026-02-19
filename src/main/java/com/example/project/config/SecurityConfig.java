@@ -37,6 +37,9 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/api/v1/media").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/media/news").permitAll()
 
+            // Term 도메인
+            .requestMatchers(HttpMethod.GET, "/api/v1/terms/daily").permitAll()
+
             .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
         )
 
