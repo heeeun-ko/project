@@ -2,6 +2,7 @@ package com.example.project.domain.term.controller;
 
 import com.example.project.domain.term.dto.request.TermCreateRequestDto;
 import com.example.project.domain.term.dto.response.TermAllResponseDto;
+import com.example.project.domain.term.dto.response.TermDetailResponseDto;
 import com.example.project.domain.term.dto.response.TermSummaryResponseDto;
 import com.example.project.domain.term.service.TermAdminService;
 import com.example.project.domain.term.service.TermService;
@@ -69,5 +70,15 @@ public class TermController {
     }
 
     return ResponseEntity.ok(ApiResponse.ok(termService.getDailySummaryTerms(userId)));
+  }
+
+  /* 데일리 용어 상세 조회 */
+  @GetMapping("/daily/{termId}")
+  public ResponseEntity<ApiResponse<TermDetailResponseDto>> getDailyTermDetail(
+      @PathVariable Long termId, Authentication authentication
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+
+    return ResponseEntity.ok(ApiResponse.ok(termService.getDailyTermDetail(userId, termId)));
   }
 }

@@ -1,5 +1,6 @@
 package com.example.project.domain.term.service;
 
+import com.example.project.domain.term.dto.response.TermDetailResponseDto;
 import com.example.project.domain.term.dto.response.TermSummaryResponseDto;
 import com.example.project.domain.term.entities.Term;
 import com.example.project.domain.term.enums.TermLevel;
@@ -8,6 +9,8 @@ import com.example.project.domain.term.repository.TermRepository;
 import com.example.project.domain.user.entities.User;
 import com.example.project.domain.user.repository.UserRepository;
 import com.example.project.domain.user.service.UserService;
+import com.example.project.global.exception.CustomException;
+import com.example.project.global.exception.ErrorCodeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ public class TermService {
   private final TermRepository termRepository;
   private final UserService userService;
 
+  // 데일리 용어 요약 조회
   public List<TermSummaryResponseDto> getDailySummaryTerms(Long userId) {
 
     // 로그인 안한 사용자 → ADMIN_PICK
@@ -40,6 +44,20 @@ public class TermService {
     }
 
     return getAdminPickTerms();
+  }
+
+  // 데일리 용어 상세 조회
+  public TermDetailResponseDto getDailyTermDetail(Long userId, Long termId) {
+
+    if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
+
+    // 사용자 존재 확인 (선택이지만 안전)
+    userService.getUser(userId);
+
+    Term term = termRepository.findById(termId)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.TERM_NOT_FOUND));
+
+    return TermDetailResponseDto.from(term);
   }
 
 
