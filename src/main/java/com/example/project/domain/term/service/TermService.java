@@ -1,5 +1,6 @@
 package com.example.project.domain.term.service;
 
+import com.example.project.domain.term.dto.request.TermSettingRequestDto;
 import com.example.project.domain.term.dto.response.TermDetailResponseDto;
 import com.example.project.domain.term.dto.response.TermSettingResponseDto;
 import com.example.project.domain.term.dto.response.TermSummaryResponseDto;
@@ -71,6 +72,22 @@ public class TermService {
     User user = userService.getUser(userId);
 
     return TermSettingResponseDto.from(user);
+  }
+
+  // 용어 설정 수정
+  @Transactional
+  public void updateMyTermSetting(Long userId, TermSettingRequestDto termSettingRequestDto) {
+
+    if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
+
+    if (termSettingRequestDto == null ||
+        (termSettingRequestDto.getPreferredTermLevel() == null && termSettingRequestDto.getTermSelectType() == null)) {
+      throw new CustomException(ErrorCodeEnum.INVALID_REQUEST);
+    }
+
+    User user = userService.getUser(userId);
+
+    user.updateTermSetting(termSettingRequestDto.getPreferredTermLevel(), termSettingRequestDto.getTermSelectType());
   }
 
 

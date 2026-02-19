@@ -7,6 +7,7 @@ public enum ErrorCodeEnum implements ErrorCode {
   // ===== Global =====
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Global_500", "서버 오류가 발생했습니다."),
   INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Global_400", "잘못된 요청입니다."),
+  INVALID_ENUM_VALUE(HttpStatus.BAD_REQUEST,"GLOBAL_400_ENUM","잘못된 enum 값입니다."),
 
   // ===== Auth =====
   UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_401", "인증이 필요합니다."),

@@ -72,4 +72,15 @@ public class User extends BaseEntity {
     }
   }
 
+  public void updateTermSetting(TermLevel preferredTermLevel, TermSelectType termSelectType) {
+
+    if (preferredTermLevel != null) {
+      this.preferredTermLevel = preferredTermLevel;
+    }
+
+    if (termSelectType != null) {
+      this.termSelectType = termSelectType;
+    }
+  }
+
 }

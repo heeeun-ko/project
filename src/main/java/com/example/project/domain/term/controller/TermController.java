@@ -1,6 +1,7 @@
 package com.example.project.domain.term.controller;
 
 import com.example.project.domain.term.dto.request.TermCreateRequestDto;
+import com.example.project.domain.term.dto.request.TermSettingRequestDto;
 import com.example.project.domain.term.dto.response.TermAllResponseDto;
 import com.example.project.domain.term.dto.response.TermDetailResponseDto;
 import com.example.project.domain.term.dto.response.TermSettingResponseDto;
@@ -89,6 +90,18 @@ public class TermController {
     Long userId = (Long) authentication.getPrincipal();
 
     return ResponseEntity.ok(ApiResponse.ok(termService.getMyTermSetting(userId)));
+  }
+
+  /* 용어 설정 수정 */
+  @PatchMapping("/settings")
+  public ResponseEntity<ApiResponse<Void>> updateMyTermSetting(
+      Authentication authentication, @RequestBody TermSettingRequestDto termSettingRequestDto
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+
+    termService.updateMyTermSetting(userId, termSettingRequestDto);
+
+    return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
 }
