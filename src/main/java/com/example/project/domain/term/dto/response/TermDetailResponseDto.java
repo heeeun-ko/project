@@ -22,4 +22,5 @@ public class TermDetailResponseDto {
         .description(term.getDescription())
         .build();
   }
+
 }

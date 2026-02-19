@@ -24,4 +24,5 @@ public class TermAllResponseDto {
         term.getDescription()
     );
   }
+
 }

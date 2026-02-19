@@ -9,15 +9,12 @@ import com.example.project.domain.term.enums.TermLevel;
 import com.example.project.domain.term.enums.TermSelectType;
 import com.example.project.domain.term.repository.TermRepository;
 import com.example.project.domain.user.entities.User;
-import com.example.project.domain.user.repository.UserRepository;
 import com.example.project.domain.user.service.UserService;
 import com.example.project.global.exception.CustomException;
 import com.example.project.global.exception.ErrorCodeEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +34,6 @@ public class TermService {
       return getAdminPickTerms();
     }
 
-    // 로그인 사용자
     User user = userService.getUser(userId);
 
     // 사용자 설정에 따른 분기
@@ -50,7 +46,6 @@ public class TermService {
 
   // 데일리 용어 상세 조회
   public TermDetailResponseDto getDailyTermDetail(Long userId, Long termId) {
-
     if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
 
     // 사용자 존재 확인 (선택이지만 안전)
@@ -64,10 +59,7 @@ public class TermService {
 
   // 용어 설정 조회
   public TermSettingResponseDto getMyTermSetting(Long userId) {
-
-    if (userId == null) {
-      throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);
-    }
+    if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
 
     User user = userService.getUser(userId);
 
@@ -77,7 +69,6 @@ public class TermService {
   // 용어 설정 수정
   @Transactional
   public void updateMyTermSetting(Long userId, TermSettingRequestDto termSettingRequestDto) {
-
     if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
 
     if (termSettingRequestDto == null ||

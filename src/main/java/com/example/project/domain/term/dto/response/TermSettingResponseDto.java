@@ -19,4 +19,5 @@ public class TermSettingResponseDto {
         .termSelectType(user.getTermSelectType())
         .build();
   }
+
 }

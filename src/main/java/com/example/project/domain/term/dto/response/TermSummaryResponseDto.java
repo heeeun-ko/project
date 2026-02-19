@@ -22,4 +22,5 @@ public class TermSummaryResponseDto {
         .summary(term.getSummary())
         .build();
   }
+
 }

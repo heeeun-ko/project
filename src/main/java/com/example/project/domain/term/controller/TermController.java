@@ -32,7 +32,6 @@ public class TermController {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<ApiResponse<Long>> createTerm(@RequestBody TermCreateRequestDto termCreateRequestDto) {
     Long termId = termAdminService.createTerm(termCreateRequestDto);
-
     return ResponseEntity.ok(ApiResponse.ok(termId));
   }
 
@@ -61,16 +60,15 @@ public class TermController {
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
+
   /* ============ USER ============= */
   /* 데일리 용어 요약 조회 */
   @GetMapping("/daily")
   public ResponseEntity<ApiResponse<List<TermSummaryResponseDto>>> getDailyTerms(Authentication authentication) {
     Long userId = null;
-
     if (authentication != null && authentication.getPrincipal() instanceof Long) {
       userId = (Long) authentication.getPrincipal();
     }
-
     return ResponseEntity.ok(ApiResponse.ok(termService.getDailySummaryTerms(userId)));
   }
 
@@ -80,7 +78,6 @@ public class TermController {
       @PathVariable Long termId, Authentication authentication
   ) {
     Long userId = (Long) authentication.getPrincipal();
-
     return ResponseEntity.ok(ApiResponse.ok(termService.getDailyTermDetail(userId, termId)));
   }
 
@@ -88,7 +85,6 @@ public class TermController {
   @GetMapping("/settings")
   public ResponseEntity<ApiResponse<TermSettingResponseDto>> getMyTermSetting(Authentication authentication) {
     Long userId = (Long) authentication.getPrincipal();
-
     return ResponseEntity.ok(ApiResponse.ok(termService.getMyTermSetting(userId)));
   }
 
@@ -98,9 +94,7 @@ public class TermController {
       Authentication authentication, @RequestBody TermSettingRequestDto termSettingRequestDto
   ) {
     Long userId = (Long) authentication.getPrincipal();
-
     termService.updateMyTermSetting(userId, termSettingRequestDto);
-
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
 
