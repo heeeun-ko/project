@@ -35,7 +35,11 @@ public enum ErrorCodeEnum implements ErrorCode {
   // ===== Term =====
   TERM_NOT_FOUND(HttpStatus.NOT_FOUND, "TERM_404", "용어를 찾을 수 없습니다."),
   TERM_ALREADY_EXISTS(HttpStatus.CONFLICT, "TERM_409", "이미 등록된 용어입니다."),
-  TERM_CREATE_FORBIDDEN(HttpStatus.FORBIDDEN, "TERM_403", "용어 등록 권한이 없습니다.")
+  TERM_CREATE_FORBIDDEN(HttpStatus.FORBIDDEN, "TERM_403", "용어 등록 권한이 없습니다."),
+
+  // ===== Stock =====
+  STOCK_INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "STOCK_400_1", "수량은 0보다 커야 합니다."),
+  STOCK_SELL_QUANTITY_EXCEEDED(HttpStatus.BAD_REQUEST, "STOCK_400_2", "보유 수량보다 많이 매도할 수 없습니다."),
 
   ;
 
