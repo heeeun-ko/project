@@ -30,7 +30,8 @@ public class SecurityConfig {
                 "/",
                 "/login/**",
                 "/oauth2/**",
-                "/api/v1/auth/refresh"
+                "/api/v1/auth/refresh",
+                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"
             ).permitAll()  // 허용 URL 설정
 
             // Media 도메인
