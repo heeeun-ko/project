@@ -3,6 +3,7 @@ package com.example.project.domain.stock.service;
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
 import com.example.project.domain.stock.dto.request.StockTradeRequestDto;
 import com.example.project.domain.stock.dto.response.AccountResponseDto;
+import com.example.project.domain.stock.dto.response.StockTransactionResponseDto;
 import com.example.project.domain.stock.entities.Account;
 import com.example.project.domain.stock.entities.StockHolding;
 import com.example.project.domain.stock.entities.StockTransaction;
@@ -182,6 +183,16 @@ public class StockService {
     stockTransactionRepository.save(stockTransaction);
   }
 
+  /* 주식 거래 기록 조회 */
+  public List<StockTransactionResponseDto> getTransactions(Long userId, Long accountId, String symbol) {
 
+    userService.getUserWithRole(userId, UserRole.USER);
+
+    List<StockTransaction> transactions = stockTransactionRepository.findTransactions(userId, accountId, symbol);
+
+    return transactions.stream()
+        .map(StockTransactionResponseDto::from)
+        .toList();
+  }
 
 }
