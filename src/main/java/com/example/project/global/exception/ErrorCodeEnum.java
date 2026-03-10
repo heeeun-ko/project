@@ -37,6 +37,11 @@ public enum ErrorCodeEnum implements ErrorCode {
   TERM_ALREADY_EXISTS(HttpStatus.CONFLICT, "TERM_409", "이미 등록된 용어입니다."),
   TERM_CREATE_FORBIDDEN(HttpStatus.FORBIDDEN, "TERM_403", "용어 등록 권한이 없습니다."),
 
+  // ===== Account =====
+  ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT_404", "계좌를 찾을 수 없습니다."),
+  ACCOUNT_CREATE_FORBIDDEN(HttpStatus.FORBIDDEN, "ACCOUNT_403", "계좌 생성 권한이 없습니다."),
+  ACCOUNT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "ACCOUNT_403_1", "해당 계좌에 접근할 수 없습니다."),
+
   // ===== Stock =====
   STOCK_INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "STOCK_400_1", "수량은 0보다 커야 합니다."),
   STOCK_SELL_QUANTITY_EXCEEDED(HttpStatus.BAD_REQUEST, "STOCK_400_2", "보유 수량보다 많이 매도할 수 없습니다."),

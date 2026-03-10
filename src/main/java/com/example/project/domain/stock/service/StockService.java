@@ -44,7 +44,6 @@ public class StockService {
   }
 
   /* 계좌 목록 조회 */
-  @Transactional(readOnly = true)
   public List<AccountResponseDto> getAccounts(Long userId) {
 
     if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
@@ -55,5 +54,30 @@ public class StockService {
         .map(AccountResponseDto::from)
         .toList();
   }
+
+  /* 계좌 수정 */
+  @Transactional
+  public AccountResponseDto updateAccount(Long userId, Long accountId, AccountCreateRequestDto accountCreateRequestDto) {
+
+    if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
+
+    Account account = accountRepository.findByIdAndStatus(accountId, Status.ACTIVE)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.ACCOUNT_NOT_FOUND));
+
+    if (!account.getUser().getId().equals(userId)) {
+      throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);
+    }
+
+    if (accountCreateRequestDto.getBroker() != null) {
+      account.setBroker(accountCreateRequestDto.getBroker());
+    }
+
+    if (accountCreateRequestDto.getNickname() != null) {
+      account.setNickname(accountCreateRequestDto.getNickname());
+    }
+
+    return AccountResponseDto.from(account);
+  }
+
 
 }

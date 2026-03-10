@@ -7,11 +7,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "account")
 @Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class Account extends BaseEntity {

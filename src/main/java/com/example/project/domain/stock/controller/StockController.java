@@ -29,11 +29,20 @@ public class StockController {
 
   /* 계좌 목록 조회 */
   @GetMapping("/accounts")
-  public ResponseEntity<ApiResponse<List<AccountResponseDto>>> getAccounts(
-      Authentication authentication
-  ) {
+  public ResponseEntity<ApiResponse<List<AccountResponseDto>>> getAccounts(Authentication authentication) {
     Long userId = (Long) authentication.getPrincipal();
     return ResponseEntity.ok(ApiResponse.ok(stockService.getAccounts(userId)));
+  }
+
+  /* 계좌 수정 */
+  @PatchMapping("/accounts/{accountId}")
+  public ResponseEntity<ApiResponse<AccountResponseDto>> updateAccount(
+      Authentication authentication,
+      @PathVariable Long accountId,
+      @RequestBody AccountCreateRequestDto accountCreateRequestDto
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    return ResponseEntity.ok(ApiResponse.ok(stockService.updateAccount(userId, accountId, accountCreateRequestDto)));
   }
 
 }
