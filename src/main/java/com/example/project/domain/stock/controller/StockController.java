@@ -1,15 +1,14 @@
 package com.example.project.domain.stock.controller;
 
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
+import com.example.project.domain.stock.dto.response.AccountResponseDto;
 import com.example.project.domain.stock.service.StockService;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +27,13 @@ public class StockController {
     return ResponseEntity.ok(ApiResponse.ok(stockService.createAccount(userId, accountCreateRequestDto)));
   }
 
+  /* 계좌 목록 조회 */
+  @GetMapping("/accounts")
+  public ResponseEntity<ApiResponse<List<AccountResponseDto>>> getAccounts(
+      Authentication authentication
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    return ResponseEntity.ok(ApiResponse.ok(stockService.getAccounts(userId)));
+  }
 
 }
