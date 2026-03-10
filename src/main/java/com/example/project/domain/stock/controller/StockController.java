@@ -1,7 +1,7 @@
 package com.example.project.domain.stock.controller;
 
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
-import com.example.project.domain.stock.dto.request.StockBuyRequestDto;
+import com.example.project.domain.stock.dto.request.StockTradeRequestDto;
 import com.example.project.domain.stock.dto.response.AccountResponseDto;
 import com.example.project.domain.stock.service.StockService;
 import com.example.project.global.response.ApiResponse;
@@ -59,12 +59,22 @@ public class StockController {
 
   /* ============ STOCK ============= */
   /* 주식 매수 입력 */
-  @PostMapping("/stock/buy")
+  @PostMapping("/stocks/buy")
   public ResponseEntity<ApiResponse<Void>> buyStock(
-      Authentication authentication, @RequestBody StockBuyRequestDto stockBuyRequestDto
+      Authentication authentication, @RequestBody StockTradeRequestDto stockTradeRequestDto
   ) {
     Long userId = (Long) authentication.getPrincipal();
-    stockService.buyStock(userId, stockBuyRequestDto);
+    stockService.buyStock(userId, stockTradeRequestDto);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
+  /* 주식 매도 입력 */
+  @PostMapping("/stocks/sell")
+  public ResponseEntity<ApiResponse<Void>> sellStock(
+      Authentication authentication, @RequestBody StockTradeRequestDto stockTradeRequestDto
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    stockService.sellStock(userId, stockTradeRequestDto);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
 

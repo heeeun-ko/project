@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class StockBuyRequestDto {
+public class StockTradeRequestDto {
 
   private Long accountId;
   private String symbol;

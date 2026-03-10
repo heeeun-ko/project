@@ -1,7 +1,7 @@
 package com.example.project.domain.stock.service;
 
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
-import com.example.project.domain.stock.dto.request.StockBuyRequestDto;
+import com.example.project.domain.stock.dto.request.StockTradeRequestDto;
 import com.example.project.domain.stock.dto.response.AccountResponseDto;
 import com.example.project.domain.stock.entities.Account;
 import com.example.project.domain.stock.entities.StockHolding;
@@ -106,11 +106,11 @@ public class StockService {
   /* ============ STOCK ============= */
   /* 주식 매수 입력 */
   @Transactional
-  public void buyStock(Long userId, StockBuyRequestDto stockBuyRequestDto) {
+  public void buyStock(Long userId, StockTradeRequestDto stockTradeRequestDto) {
 
     User user = userService.getUserWithRole(userId, UserRole.USER);
 
-    Account account = accountRepository.findByIdAndStatus(stockBuyRequestDto.getAccountId(), Status.ACTIVE)
+    Account account = accountRepository.findByIdAndStatus(stockTradeRequestDto.getAccountId(), Status.ACTIVE)
         .orElseThrow(() -> new CustomException(ErrorCodeEnum.ACCOUNT_NOT_FOUND));
 
     if (!account.getUser().getId().equals(user.getId())) {
@@ -120,33 +120,68 @@ public class StockService {
     // 거래 기록 생성
     StockTransaction stockTransaction = StockTransaction.create(
         account,
-        stockBuyRequestDto.getSymbol(),
-        stockBuyRequestDto.getName(),
+        stockTradeRequestDto.getSymbol(),
+        stockTradeRequestDto.getName(),
         StockTransactionType.BUY,
-        stockBuyRequestDto.getPrice(),
-        stockBuyRequestDto.getQuantity(),
-        stockBuyRequestDto.getTransactionDate()
+        stockTradeRequestDto.getPrice(),
+        stockTradeRequestDto.getQuantity(),
+        stockTradeRequestDto.getTransactionDate()
     );
 
     stockTransactionRepository.save(stockTransaction);
 
     // 보유 종목 조회
     Optional<StockHolding> optionalStockHolding =
-        stockHoldingRepository.findByAccountIdAndSymbolAndStatus(account.getId(), stockBuyRequestDto.getSymbol(), Status.ACTIVE);
+        stockHoldingRepository.findByAccountIdAndSymbolAndStatus(account.getId(), stockTradeRequestDto.getSymbol(), Status.ACTIVE);
 
     if (optionalStockHolding.isPresent()) {
       StockHolding stockHolding = optionalStockHolding.get();
-      stockHolding.buy(stockBuyRequestDto.getPrice(), stockBuyRequestDto.getQuantity());
+      stockHolding.buy(stockTradeRequestDto.getPrice(), stockTradeRequestDto.getQuantity());
     } else {
       StockHolding stockHolding = StockHolding.create(
           account,
-          stockBuyRequestDto.getSymbol(),
-          stockBuyRequestDto.getName(),
-          stockBuyRequestDto.getQuantity(),
-          stockBuyRequestDto.getPrice()
+          stockTradeRequestDto.getSymbol(),
+          stockTradeRequestDto.getName(),
+          stockTradeRequestDto.getQuantity(),
+          stockTradeRequestDto.getPrice()
       );
+
       stockHoldingRepository.save(stockHolding);
     }
   }
+
+  /* 주식 매도 입력 */
+  @Transactional
+  public void sellStock(Long userId, StockTradeRequestDto stockTradeRequestDto) {
+
+    User user = userService.getUserWithRole(userId, UserRole.USER);
+
+    Account account = accountRepository.findByIdAndStatus(stockTradeRequestDto.getAccountId(), Status.ACTIVE)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.ACCOUNT_NOT_FOUND));
+
+    if (!account.getUser().getId().equals(user.getId())) {
+      throw new CustomException(ErrorCodeEnum.ACCESS_DENIED);
+    }
+
+    StockHolding holding = stockHoldingRepository
+        .findByAccountIdAndSymbolAndStatus(account.getId(), stockTradeRequestDto.getSymbol(), Status.ACTIVE)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.STOCK_NOT_FOUND));
+
+    holding.sell(stockTradeRequestDto.getQuantity());
+
+    StockTransaction stockTransaction = StockTransaction.create(
+        account,
+        holding.getSymbol(),
+        holding.getName(),
+        StockTransactionType.SELL,
+        stockTradeRequestDto.getPrice(),
+        stockTradeRequestDto.getQuantity(),
+        stockTradeRequestDto.getTransactionDate()
+    );
+
+    stockTransactionRepository.save(stockTransaction);
+  }
+
+
 
 }
