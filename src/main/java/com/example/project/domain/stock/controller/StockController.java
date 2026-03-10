@@ -45,4 +45,14 @@ public class StockController {
     return ResponseEntity.ok(ApiResponse.ok(stockService.updateAccount(userId, accountId, accountCreateRequestDto)));
   }
 
+  /* 계좌 삭제 */
+  @DeleteMapping("/accounts/{accountId}")
+  public ResponseEntity<ApiResponse<Void>> deleteAccount(
+      Authentication authentication,@PathVariable Long accountId
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    stockService.deleteAccount(userId, accountId);
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
 }

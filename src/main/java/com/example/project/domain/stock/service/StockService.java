@@ -79,5 +79,19 @@ public class StockService {
     return AccountResponseDto.from(account);
   }
 
+  /* 계좌 삭제 */
+  @Transactional
+  public void deleteAccount(Long userId, Long accountId) {
+
+    if (userId == null) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
+
+    Account account = accountRepository.findByIdAndStatus(accountId, Status.ACTIVE)
+        .orElseThrow(() -> new CustomException(ErrorCodeEnum.ACCOUNT_NOT_FOUND));
+
+    if (!account.getUser().getId().equals(userId)) {throw new CustomException(ErrorCodeEnum.UNAUTHORIZED);}
+
+    account.deactivate();
+  }
+
 
 }
