@@ -43,6 +43,7 @@ public enum ErrorCodeEnum implements ErrorCode {
   ACCOUNT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "ACCOUNT_403_1", "해당 계좌에 접근할 수 없습니다."),
 
   // ===== Stock =====
+  STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK_404", "보유 종목을 찾을 수 없습니다."),
   STOCK_INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "STOCK_400_1", "수량은 0보다 커야 합니다."),
   STOCK_SELL_QUANTITY_EXCEEDED(HttpStatus.BAD_REQUEST, "STOCK_400_2", "보유 수량보다 많이 매도할 수 없습니다."),
 
