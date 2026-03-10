@@ -24,7 +24,7 @@ public class Account extends BaseEntity {
   private String broker; // 증권사
 
   @Column(length = 50)
-  private String nickname; // 계좌 별칭 (예: 삼성증권, 키움, 테스트 계좌)
+  private String nickname; // 계좌 별칭 (예: 삼성증권, 키움)
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
