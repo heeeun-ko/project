@@ -3,14 +3,20 @@ package com.example.project.domain.stock.controller;
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
 import com.example.project.domain.stock.dto.request.StockTradeRequestDto;
 import com.example.project.domain.stock.dto.response.AccountResponseDto;
+import com.example.project.domain.stock.dto.response.StockHoldingResponseDto;
 import com.example.project.domain.stock.dto.response.StockTransactionResponseDto;
+import com.example.project.domain.stock.entities.StockHolding;
 import com.example.project.domain.stock.entities.StockTransaction;
+import com.example.project.domain.stock.enums.StockTransactionType;
 import com.example.project.domain.stock.service.StockService;
 import com.example.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -85,10 +91,32 @@ public class StockController {
   public ResponseEntity<ApiResponse<List<StockTransactionResponseDto>>> getTransactions(
       Authentication authentication,
       @RequestParam(required = false) Long accountId,
-      @RequestParam(required = false) String symbol
+      @RequestParam(required = false) String symbol,
+      @RequestParam(required = false) StockTransactionType type,
+      @RequestParam(required = false) String broker,
+      @RequestParam(required = false) String nickname,
+      @RequestParam(required = false) LocalDate fromDate,
+      @RequestParam(required = false) LocalDate toDate
   ) {
     Long userId = (Long) authentication.getPrincipal();
-    return ResponseEntity.ok(ApiResponse.ok(stockService.getTransactions(userId, accountId, symbol)));
+    return ResponseEntity.ok(ApiResponse.ok(
+        stockService.getTransactions(userId, accountId, symbol, type, broker, nickname, fromDate, toDate)));
+  }
+
+  /* 보유 주식 조회 */
+  @GetMapping("/stocks/holdings")
+  public ResponseEntity<ApiResponse<List<StockHoldingResponseDto>>> getHoldings(
+      Authentication authentication,
+      @RequestParam(required = false) Long accountId,
+      @RequestParam(required = false) String symbol,
+      @RequestParam(required = false) String broker,
+      @RequestParam(required = false) String nickname,
+      @RequestParam(required = false) LocalDate fromDate,
+      @RequestParam(required = false) LocalDate toDate
+  ) {
+    Long userId = (Long) authentication.getPrincipal();
+    return ResponseEntity.ok(ApiResponse.ok(
+        stockService.getHoldings(userId, accountId, symbol, broker, nickname, fromDate, toDate)));
   }
 
 }

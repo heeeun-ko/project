@@ -3,6 +3,7 @@ package com.example.project.domain.stock.service;
 import com.example.project.domain.stock.dto.request.AccountCreateRequestDto;
 import com.example.project.domain.stock.dto.request.StockTradeRequestDto;
 import com.example.project.domain.stock.dto.response.AccountResponseDto;
+import com.example.project.domain.stock.dto.response.StockHoldingResponseDto;
 import com.example.project.domain.stock.dto.response.StockTransactionResponseDto;
 import com.example.project.domain.stock.entities.Account;
 import com.example.project.domain.stock.entities.StockHolding;
@@ -20,6 +21,9 @@ import com.example.project.global.exception.ErrorCodeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,14 +188,60 @@ public class StockService {
   }
 
   /* 주식 거래 기록 조회 */
-  public List<StockTransactionResponseDto> getTransactions(Long userId, Long accountId, String symbol) {
+  public List<StockTransactionResponseDto> getTransactions(
+      Long userId,
+      Long accountId,
+      String symbol,
+      StockTransactionType type,
+      String broker,
+      String nickname,
+      LocalDate fromDate,
+      LocalDate toDate
+  ) {
 
     userService.getUserWithRole(userId, UserRole.USER);
 
-    List<StockTransaction> transactions = stockTransactionRepository.findTransactions(userId, accountId, symbol);
+    List<StockTransaction> stockTransactionList = stockTransactionRepository.findTransactions(
+        userId,
+        accountId,
+        symbol,
+        type,
+        broker,
+        nickname,
+        fromDate,
+        toDate
+    );
 
-    return transactions.stream()
+    return stockTransactionList.stream()
         .map(StockTransactionResponseDto::from)
+        .toList();
+  }
+
+  /* 보유 주식 조회 */
+  public List<StockHoldingResponseDto> getHoldings(
+      Long userId,
+      Long accountId,
+      String symbol,
+      String broker,
+      String nickname,
+      LocalDate fromDate,
+      LocalDate toDate
+  ) {
+
+    userService.getUserWithRole(userId, UserRole.USER);
+
+    List<StockHolding> stockHoldingList = stockTransactionRepository.findHoldings(
+        userId,
+        accountId,
+        symbol,
+        broker,
+        nickname,
+        fromDate,
+        toDate
+    );
+
+    return stockHoldingList.stream()
+        .map(StockHoldingResponseDto::from)
         .toList();
   }
 
