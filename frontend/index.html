@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Frontend UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar glass">
+        <div class="brand">
+          <span class="logo-dot"></span>
+          <h1>SamMu Admin</h1>
+        </div>
+        <nav>
+          <button class="nav-item active">대시보드</button>
+          <button class="nav-item">사용자</button>
+          <button class="nav-item">뉴스 미디어</button>
+          <button class="nav-item">주식 모의투자</button>
+          <button class="nav-item">용어 학습</button>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <header class="topbar glass">
+          <div>
+            <p class="eyebrow">Backend Connected</p>
+            <h2>깔끔하고 트렌디한 iPhone 15 Green UI</h2>
+          </div>
+          <button class="cta">+ 새 콘텐츠</button>
+        </header>
+
+        <section class="stats-grid">
+          <article class="stat-card glass">
+            <p>활성 사용자</p>
+            <h3>4,208</h3>
+            <small>전주 대비 +12%</small>
+          </article>
+          <article class="stat-card glass">
+            <p>오늘의 뉴스 픽</p>
+            <h3>37</h3>
+            <small>자동 큐레이션 정상</small>
+          </article>
+          <article class="stat-card glass">
+            <p>용어 퀴즈 완료율</p>
+            <h3>82%</h3>
+            <small>학습 효율 상승 중</small>
+          </article>
+          <article class="stat-card glass">
+            <p>모의투자 거래량</p>
+            <h3>₩94.1M</h3>
+            <small>오늘 기준</small>
+          </article>
+        </section>
+
+        <section class="panel-grid">
+          <article class="panel glass">
+            <h4>최근 API 상태</h4>
+            <ul class="status-list">
+              <li><span class="status ok"></span> Auth API <em>200 OK</em></li>
+              <li><span class="status ok"></span> Media API <em>200 OK</em></li>
+              <li><span class="status ok"></span> Stock API <em>200 OK</em></li>
+              <li><span class="status warn"></span> Term API <em>지연 180ms</em></li>
+            </ul>
+          </article>
+
+          <article class="panel glass">
+            <h4>오늘의 해야 할 일</h4>
+            <div class="todo-item"><input type="checkbox" checked /> OAuth 로그인 QA</div>
+            <div class="todo-item"><input type="checkbox" /> 뉴스 카테고리 정리</div>
+            <div class="todo-item"><input type="checkbox" /> 주식 거래 차트 연결</div>
+            <div class="todo-item"><input type="checkbox" checked /> 용어 난이도 튜닝</div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
